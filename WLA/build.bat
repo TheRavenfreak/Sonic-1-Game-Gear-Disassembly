@@ -1,0 +1,1 @@
+wla-z80 -[i] {o} <sourcecode.asm> [test.sms]
