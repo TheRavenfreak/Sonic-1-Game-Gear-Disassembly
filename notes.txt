@@ -1,0 +1,195 @@
+Sonic 1 Game Gear Notes 
+ROM Contents (Taken from Sonic Retro's Sonic 1 8-bit hacking guide. Thanks to Penta Penguin, Kroc Camen, Valleybell, and Magus for the guide.)
+Level header format:
+    SP FW FW FH FH LX LX ?? LW LY LY XH LH
+    SX SY FL FL FS FS BM BM LA LA 09 SA SA
+    IP CS CC CP OL OL SR UW TL 00 MU
+Level Layout Offsets:
+$17430- GHZ1
+$17BB6- GHZ2
+$1826A- GHZ3
+$185A7- BZ1
+$18C72- BZ2
+$190F9- BZ3
+$19301- JZ1
+$19CE9- JZ2
+$1A21C- JZ3
+$1A626- LZ1
+$1ACB0- LZ2
+$1B59C- LZ3
+$1B9A6- SBZ1
+$1C035- SBZ2
+$1C8F8- ???
+
+Level IDs:
+
+$0B-Labyrinth Act 3
+Object IDs:
+01 	Super Ring monitor
+02 	Power Sneakers monitor
+03 	One-Up monitor
+04 	Shield monitor
+05 	Invincibility monitor
+06 	Chaos Emerald
+07 	End sign
+08 	Badnik "Crabmeat" (GH)
+09 	Wooden platform - Swinging (GH)
+0A 	Explosion
+0B 	Wooden platform (GH)
+0C 	Wooden platform - Falls when touched (GH)
+0E 	Badnik "Buzz Bomber" (GH/B)
+0F 	Wooden platform - Sliding left-right (GH)
+10 	Badnik "Moto Bug" (GH)
+11 	Badnik "Newtron" (GH)
+12 	Robotnik - Green Hill Boss (GH)
+16 	Flame Thrower (SB)
+17 	Door - Opens from left only (SB)
+18 	Door - Opens from right only (SB)
+19 	Door - Two ways (SB)
+1A 	Electric sphere (SB)
+1B 	Badnik "Ball Hog" (SB)
+1C 	Unknown - Ball from the "Ball Hog" ?
+1D 	Switch (SB, L, others ?)
+1E 	Switch Activated Door (SB)
+1F 	Badnik "Caterkiller" (SB)
+21 	Bumper - Sliding left-right (Bonus Stage ?)
+22 	Robotnik - Scrap Brain Boss (SB)
+23 	Free animal - Rabbit
+24 	Free animal - Bird
+25 	Animal Cell
+26 	Badnik "Chopper" (J, B)
+27 	Vertical Step - Falling from a waterfall (J)
+28 	Horizontal Step - Falling from a waterfall (J)
+29 	Floating Step - Sonic can travel with it (J)
+2C 	Robotnik - Jungle Boss (J)
+2D 	Badnik "Yadrin" (B)
+2E 	Falling Bridge (B)
+30 	Passing Clouds (SKYB)
+31 	Propeller (SKYB)
+32 	Badnik "Bomb" (SKYB)
+33 	Large Cannons in Sky Base Act 2 (SKYB)
+33 	Cannon Ball (SKYB)
+35 	Badnik "Unidus" (SKYB)
+37 	Rotating cannon (SKYB)
+38 	Flying platform (SKYB)
+39 	Spiked wall slowly moving right (SKYB)
+3A 	Small cannon in Sky Base Act 1 (SKYB)
+3B 	Flying platform moving up-down (SKYB)
+3C 	Badnik "Jaws" (L)
+3D 	Rotating spiked ball (L)
+3E 	Spear, shifting up-down (L)
+3F 	Fire ball thrower (L)
+40 	Water Level Object (L)
+41 	Bubble Maker (L)
+44 	Badnik "Burrobot" (L)
+45 	Platform, move up when touched (L)
+46 	Electrical Hazard for the Sky Base Boss (SKYB)
+48 	Robotnik - Bridge Boss (SB)
+49 	Robotnik - Labyrinth Boss (L)
+4A 	Robotnik - Sky Base Boss (SKYB)
+4B 	Zone that makes you fall (like in GH2)
+4C 	Flipper (Bonus Stage)
+4D 	RESET!
+4E 	Balance (B)
+4F 	RESET!
+50 	Flower (GH)
+51 	Box - Starpost
+52 	Box - Continue
+53 	Final animation in GH, when Sonic falls on Robotnik (then, goes to the next level)
+54 	Emeralds animation (on the map), when Sonic has them all (and goes to the next level)
+55 	Makes Sonic blink for a short time
+
+****RAM Access****
+$D238- Current Level
+$D2A9- Ring Counter
+$D240- Lives Counter
+$D279- Chaos Emerald Counter
+$D2CF- Minutes on Timer
+$D2D0- Seconds on Timer
+$D3FF-$D400 Sonic's current horizontal position in the level
+$D402-D403- Sonic's current vertical position in the level
+$D407- Set's Sonic in the air
+$D415- Sonic's Current Animation
+$01- Rolling Right, $02 Facing Left, $03 Rolling Left $04 Jumping
+IY- $D200
+IX- $D3FD- Used For Sonic's Code $DCDA-Used for Sound driver?
+
+Sound Effects:
+00- Jumping
+01- Explosion
+02- Ring
+
+GHZ Music Data:
+channel_1$0A $00;Pointer To Channel 1
+channel_2$74 $01;Pointer to channel 2
+channel_3$CD $02;Pointer to channel 3
+channel_4$FC $04;Pointer to noise channel
+$00 $00;Unused/Channel 5
+channel_1:
+$80 $01 $00 $01 $00;Tempo Modifier
+$82 $FF $14 $96 $00 $32 $0A;Envelope Setup
+$85 $FF;Does Nothing
+$83 $0C $01 $04 $05 $00;Modulation $0C-Delay $01-Speed $04-Step Count+1 $05 $00-Change per step
+$81 $0C;set volume $00 is the minimum value this can be set at, $0F is the max
+$8A $06;Sets the default note length
+29 00 25 00 29 00 25 00 2B 00
+27 00 2B 00 27 00 30 00 29 00 
+30 00 29 00 32 00 2B 00 32 00 
+2B 00 
+$8A $0C ;change note length
+1B 18 
+7F;rest
+00 
+19 18 
+7F 00;rest
+1B 18 
+7F 00 ;rest
+19 18 
+7F 00;rest
+1B 00 7F 00;rest
+19 00 7F 00 
+20 18 
+7F 00;rest 
+1B 18 7F 00;rest 
+19 18 
+8D 19 ;no attack
+30 
+8D 19 24 ;no attack
+7F 00 ;rest
+19 18 7F 00 ;rest
+1B 18 7F 00 
+20 18 
+19 18 
+7F 00 
+1B 18
+7F 00 
+20 18 20 24 1B 00 
+8D 1B 30
+ 8D 1B 30 
+ 8D 1B 18 
+ 7F 
+18 
+88 ;set master loop
+7F 30 20 00 19 18 20 00 
+1B 18 20 00 1B 18 17 24 8D 17 
+00 7F 18 19 00 24 00 22 18 20 
+00 1B 18 20 00 1B 18 17 24 7F 
+30 20 00 19 18 20 00 1B 18 20 
+00 1B 18 17 24 8D 17 00 7F 18 
+19 00 19 00 15 18 19 00 17 18 
+19 00 17 18 10 24 7F 30 20 00 
+19 18 20 00 1B 18 20 00 1B 18 
+17 24 8D 17 00 7F 18 19 00 24 
+00 22 18 20 00 1B 18 20 00 1B 
+18 17 24 7F 30 20 00 19 18 20 
+00 1B 18 20 00 1B 18 17 24 8D 
+17 00 7F 18 19 00 19 00 15 18 
+19 00 17 18 19 00 17 18 10 18 
+14 00 12 30 8D 12 30 8D 12 30 
+8D 12 00 10 00 12 00 14 00 8D 
+14 30 8D 14 30 8D 14 30 8D 14 
+00 10 00 19 00 13 00 8D 13 30 
+8D 13 30 8D 13 30 8D 13 00 10 
+00 13 00 12 00 8D 12 48 8D 12 
+00 24 18 24 00 25 00 24 00 27 
+00 24 00 24 00 20 00 FF;loop back to offset $91 

@@ -1,0 +1,2 @@
+[objects]
+Sonic1.o
