@@ -6295,6 +6295,186 @@ label_6a46h:
 ld      c,$00
 ld      l,c
 ld      h,c
+ld      a,(ix+05)
+and     $1f
+jr      z,+          ; (+04h)
+ld      hl,$ffc0
+dec     c
+
++: 
+ld      (ix+$0a),l
+ld      (ix+$0b),h
+ld      (ix+$0c),c
+ret 
+
+set     5,(ix+$18)
+bit     0,(ix+$18)
+jr      nz,+        ; (+10h)
+ld      a,(ix+05)
+ld      (ix+$11),a
+ld      a,(ix+06)
+ld      (ix+$12),a
+set     0,(ix+$18)
+
++: 
+bit     1,(ix+$18) 
+jr      z,label_6a9ch          ; (+1dh)
+ld      hl,($d257)
+ld      bc,$fff0
+add     hl,bc
+ld      e,(ix+05)
+ld      d,(ix+06)
+xor     a
+sbc     hl,de
+jr      nc,label_6a98h         ; (+07h)
+ld      (ix+$0f),a
+ld      (ix+$10),a
+ret
+
+label_6a98h:
+res     1,(ix+$18)
+
+label_6a9ch:
+ld      a,(ix+$16)
+add     a,(ix+$17)
+ld      (ix+$17),a
+cp      $18 
+jr      c,label_6ac0h          ; (+17h)
+ld      l,(ix+$0a)
+ld      h,(ix+$0b)
+ld      a,(ix+$0c)
+ld      de,$0040
+add     hl,de
+adc     a,d
+ld      (ix+$0a),l
+ld      (ix+$0b),h
+ld      (ix+$0c),a
+
+label_6ac0h: 
+ld      (ix+$0d),$1a
+ld      (ix+$0e),$10
+ld      a,($d409)
+and     a  
+jp      m,label_6aeah
+ld      hl,$0806
+ld      ($d215),hl
+call    $3326
+jr      c,label_6aeah          ; (+10h)
+ld      (ix+$16),$01
+ld      bc,$0010
+ld      e,(ix+$0a)
+ld      d,(ix+$0b)
+call    $7cfc
+
+label_6aeah: 
+ld      hl,$691a
+ld      a,($d2d5)
+and     a
+jr      z,+          ; (+03h)
+ld      hl,$692c
+
++: 
+ld      (ix+$0f),l
+ld      (ix+$10),h
+ld      hl,($d257)
+ld      de,$00a8
+add     hl,de
+ld      e,(ix+05)
+ld      d,(ix+06)
+xor     a
+sbc     hl,de
+ret     nc
+
+ld      (ix+$0a),a
+ld      (ix+$0b),a
+ld      (ix+$0c),a
+ld      (ix+$16),a
+ld      (ix+$17),a
+ld      (ix+04),a
+ld      a,(ix+$11)
+ld      (ix+05),a
+ld      a,(ix+$12)
+ld      (ix+06),a
+set     1,(ix+$18)
+ret    
+
+set     5,(ix+$18)
+ld      (ix+$0d),$02
+ld      (ix+$0e),$02
+ld      hl,$0303
+ld      ($d215),hl
+call    $3326
+call    nc,label_2fd7h
+ld      l,(ix+$0a)
+ld      h,(ix+$0b)
+ld      a,(ix+$0c)
+ld      e,(ix+$13)
+ld      d,(ix+$14)
+add     hl,de
+adc     a,$00
+ld      (ix+$0a),l
+ld      (ix+$0b),h
+ld      (ix+$0c),a
+ld      l,(ix+02)
+ld      h,(ix+03)
+ld      ($d20f),hl
+ld      l,(ix+05)
+ld      h,(ix+06)
+ld      ($d211),hl
+ld      hl,$0000
+ld      ($d213),hl
+ld      ($d215),hl
+ld      (ix+$0f),l
+ld      (ix+$10),h
+ld      hl,$6be1
+ld      a,($d238)
+cp      $05
+jr      z,label_6b95h          ; (+07h)
+cp      $0b
+jr      z,label_6b95h          ; (+03h)
+ld      hl,$6bdf
+
+label_6b95h:
+ld      a,($d224)
+and     $01
+ld      e,a
+ld      d,$00
+add     hl,de
+ld      a,(hl)
+call    label_2f5bh
+ld      c,(ix+02)
+ld      b,(ix+03)
+ld      l,c
+ld      h,b
+ld      de,$fff8
+add     hl,de
+ld      de,($d254)
+and     a
+sbc     hl,de
+jr      c,label_6bdah          ; (+23h)
+inc     d
+ex      de,hl
+sbc     hl,bc
+jr      c,label_6bdah          ; (+1dh)
+ld      c,(ix+05)
+ld      b,(ix+06)
+ld      l,c
+ld      h,b
+ld      de,$0010
+add     hl,de
+ld      de,($d257)
+and     a
+sbc     hl,de
+jr      c,label_6bdah          ; (+08h)
+ld      hl,$00c0
+add     hl,de
+and     a
+sbc     hl,bc
+ret     nc
+
+label_6bdah:
+ld      (ix+$00),$ff
+ret     
 .incbin "10.bin"
 
 
