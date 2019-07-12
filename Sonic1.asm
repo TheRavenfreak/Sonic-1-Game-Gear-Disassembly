@@ -6523,7 +6523,7 @@ label_6c43h:
 ld      e,(ix+$12)
 ld      d,$00
 ld      hl,$6d46
-.incbin "10.bin.bak"
+.incbin "10.bin"
 
 
 .BANK 2 SLOT 2
