@@ -232,23 +232,23 @@ _LABEL_140_15:
 	ret
 
 _LABEL_144_37:
-	call _LABEL_14D_38
+	call Load_Labyrinth_Underwater_Palettes
 	ret
 
 _LABEL_148_14:
 	bit  7, (iy+6)
 	ret  z
 
-_LABEL_14D_38:
+Load_Labyrinth_Underwater_Palettes:
 	ld   a, (RAM_D2DC)
 	and  a
 	jr   z, _LABEL_140_15
 	cp   $FF
 	jr   nz, _LABEL_140_15
-	ld   hl, $01DE
+	ld   hl, $01DE;Get Labyrinth act 1 and 2's palette
 	bit  4, (iy+7)
 	jr   z, _LABEL_163_16
-	ld   hl, $021E
+	ld   hl, $021E;Get Labyrinth Act 3's palette
 _LABEL_163_16:
 	call _LABEL_167_17
 	ret
@@ -6474,8 +6474,56 @@ ret     nc
 
 label_6bdah:
 ld      (ix+$00),$ff
-ret     
-.incbin "10.bin"
+ret  
+
+ld      b,$08
+inc     (hl)
+ld      (hl),$dd
+rr      b
+xor     $dd
+rr      b
+ld      b,(hl)
+jr      nz,label_6c1ah         ; (+2dh)
+ld      e,(ix+02)
+ld      d,(ix+03)
+ld      (ix+$14),e
+ld      (ix+$15),d
+xor     a
+ld      (ix+$0f),a
+ld      (ix+$10),a
+ld      (ix+$12),a
+ld      (ix+07),a
+ld      (ix+08),a
+ld      (ix+09),a
+ld      hl,($d254)
+ld      bc,$0100
+add     hl,bc
+sbc     hl,de
+ret     nc
+
+set     0,(ix+$18)
+
+label_6c1ah:
+ld      (ix+$0d),$14
+ld      (ix+$0e),$20
+ld      l,(ix+02)
+ld      h,(ix+03)
+ld      de,(sonic_horizontal_pos)
+and     a
+sbc     hl,de
+jr      c,label_6c43h          ; (+12h)
+ld      de,$0040
+sbc     hl,de
+jr      nc,label_6c43h         ; (+0bh)
+ld      a,(ix+$12)
+cp      $05
+jr      nc,label_6c43h         ; (+04h)
+ld      (ix+$12),$05
+label_6c43h:
+ld      e,(ix+$12)
+ld      d,$00
+ld      hl,$6d46
+.incbin "10.bin.bak"
 
 
 .BANK 2 SLOT 2
@@ -7428,8 +7476,8 @@ ret     nz
 .incbin "Art/boss/LZEggman.bin";load Eggman's compressed graphics
 
 set     5,(ix+$18)
-ld      (ix+$0d),$08
-ld      (ix+$0e),$0a
+ld      (ix+$0d),$08;08
+ld      (ix+$0e),$0a;0a
 ld      hl,$0404
 ld      ($d215),hl
 call    $3326
@@ -7885,7 +7933,206 @@ ret
 set     5,(ix+$18)
 ld      (ix+$0f),$52
 ld      (ix+$10),$9a
-bit     5,(iy+03)    
+bit     5,(iy+03) 
+jr      nz,label_988ch
+ld      a,(ix+$11)
+ld      (ix+$12),a
+ld      a,(ix+$11)
+cp      $05
+jr      nc,label_9895h
+inc     (ix+$11)
+ 
+jp      label_9895h
+label_988ch:
+ld      a,(ix+$11)
+and     a
+jr      z,label_9895h
+dec     (ix+$11)
+
+label_9895h:  
+ld      a,(ix+$11)
+cp      $01
+jr      nc,label_98bdh
+ld      hl,$140c
+ld      ($d215),hl
+ld      (ix+$0d),$1e
+ld      (ix+$0e),$16
+call    label_3326h
+ret     c
+
+ld      bc,$9972
+call    $9a83
+ret     nc
+
+ld      c,$ff
+ld      de,$fffc
+jp      label_9957h
+
+label_98bdh:
+cp      $04 
+jp      nc,$9931
+ld      (ix+$0f),$64
+ld      (ix+$10),$9a
+ld      hl,$080f
+ld      ($d215),hl
+ld      (ix+$0d),$1e
+ld      (ix+$0e),$16
+call    label_3326h
+ret     c
+
+ld      bc,$9992
+call    $9a83
+ret     nc
+
+ld      a,(ix+$12)
+cp      (ix+$11)
+ret     nc  
+
+ld      a,(sonic_horizontal_pos)
+add     a,$08
+and     $1f
+add     a,a
+ld      c,a
+ld      b,$00
+ld      hl,$99d2
+add     hl,bc
+ld      e,(hl)
+inc     hl
+ld      d,(hl)
+ld      hl,($d404)
+ld      a,($d406)
+add     hl,de
+adc     a,$ff
+ld      ($d404),hl
+ld      ($d406),a
+ld      hl,$9a12
+add     hl,bc
+ld      e,(hl)
+inc     hl
+ld      d,(hl)
+ld      hl,($d407)
+ld      a,l
+cpl     
+ld      l,a
+ld      a,h
+cpl     
+ld      h,a
+ld      a,($d409)
+cpl     
+add     hl,de
+adc     a,$ff
+ld      ($d407),hl
+ld      ($d409),a
+ret     
+
+ld      c,$00
+ld      de,$0008
+jp      label_9957h
+ld      (ix+$0f),$76
+ld      (ix+$10),$9a
+ld      hl,$021a
+ld      ($d215),hl
+ld      (ix+$0d),$1e
+ld      (ix+$0e),$16
+call    label_3326h
+ret     c
+
+ld      bc,$99b2
+call    $9a83
+ret     nc
+
+ld      c,$00
+ld      de,$001a
+label_9957h:
+ld      a,($d2e9)
+ld      hl,($d2e7)
+ld      ($d407),hl
+ld      ($d409),a
+ld      hl,($d404)
+ld      a,($d406)
+add     hl,de
+adc     a,c
+ld      ($d404),hl
+ld      ($d406),a
+ret  
+.incbin "9972-99ad.bin";9972-99ad 
+
+.include "object_logic/ss_movingbumper.asm"
+set     5,(ix+$18)
+ld      (ix+$0d),$1e
+ld      (ix+$0e),$60
+ld      hl,$0018
+ld      ($d215),hl
+call    label_3326h
+jr      c,label_9ba5h
+ld      l,(ix+02)
+ld      h,(ix+03)
+ld      a,l
+add     a,a
+rl      h
+add     a,a
+rl      h
+add     a,a
+rl      h
+ld      e,h
+ld      l,(ix+05)
+ld      h,(ix+06)
+ld      a,l
+add     a,a
+rl      h
+add     a,a
+rl      h
+add     a,a
+rl      h
+ld      d,h
+ld      hl,$9bad
+ld      b,$05
+-:
+ld      a,(hl)
+inc     hl
+cp      e
+jr      nz,label_9ba1h
+ld      a,(hl)
+cp      d
+jr      nz,label_9ba1h
+inc     hl
+ld      a,(hl)
+ld      ($d2d4),a
+ld      a,$01
+ld      ($d283),a
+set     4,(iy+06)
+jp      label_9ba5h
+
+label_9ba1h:
+inc     hl
+inc     hl
+djnz    -
+
+label_9ba5h:
+xor     a
+ld      (ix+$0f),a
+ld      (ix+$10),a
+ret     
+.incbin "9bad-9bbb.bin"
+ld      (ix+07),$80
+ld      (ix+08),$01
+ld      (ix+09),$00
+ld      (ix+$0f),$3d
+ld      (ix+$10),$9c
+set     5,(ix+$18)
+bit     0,(ix+$18)
+jr      nz,+
+ld      a,(ix+02)
+ld      (ix+$11),a
+ld      a,(ix+03)
+ld      (ix+$12),a
+ld      a,$18;play projectile sound
+rst     $28
+set     0,(ix+$18)
+
++:
+ld      (ix+$0d),$06
+ld      (ix+$0e),$08
 .incbin "bank2.bin"
 
 
